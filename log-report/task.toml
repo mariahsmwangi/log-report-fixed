@@ -1,0 +1,32 @@
+artifacts = ["/app/report.json"]
+
+[task]
+name        = "dynamo/log-report"
+description = "Parse an Apache access log into a compact JSON report summarising request counts by status code and top requested paths."
+
+[agent]
+timeout_sec = 300
+
+[verifier]
+timeout_sec = 120
+
+[metadata]
+category                   = "software_engineering"
+subcategory                = "scripting_and_automation"
+task_objective             = ["transform"]
+artifact_type              = ["document_or_report"]
+expert_time_estimate_hours = 0.25
+model_tested               = ["claude-3-5-sonnet", "gpt-4o"]
+agent_tested               = ["swe-agent", "aider"]
+difficulty_explanation     = "Straightforward text parsing task; any competent script or one-liner can produce the required JSON shape from a well-formed access log."
+solution_explanation       = "Read /app/access.log, tally requests by HTTP status code, identify the top-5 most-requested paths, and write the results to /app/report.json as a JSON object with keys 'status_counts' and 'top_paths'."
+verification_explanation   = "The verifier loads /app/report.json and asserts: (1) valid JSON, (2) status_counts keys match log, (3) counts are correct, (4) top_paths sorted descending by count."
+
+[environment]
+build_timeout_sec = 300
+cpus              = 1
+memory_mb         = 512
+storage_mb        = 1024
+gpus              = 0
+allow_internet    = false
+mcp_servers       = []
